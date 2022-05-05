@@ -1,5 +1,6 @@
 package com.ssmmhh.jetpackcomposebasicscodelab
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,7 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(names: List<String> = listOf("World", "Compose")) {
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
+
         for (name in names) {
             Greeting(name = name)
         }
@@ -39,6 +41,11 @@ fun MainScreen(names: List<String> = listOf("World", "Compose")) {
 
 @Composable
 private fun Greeting(name: String) {
+
+    val expanded = remember { mutableStateOf(false) }
+
+    val extraPadding = if (expanded.value) 56.dp else 0.dp
+
     Surface(
         modifier = Modifier
             .padding(vertical = 4.dp, horizontal = 8.dp)
@@ -48,7 +55,7 @@ private fun Greeting(name: String) {
         Row(modifier = Modifier) {
             Column(
                 modifier = Modifier
-                    .padding(24.dp)
+                    .padding(bottom = extraPadding)
                     .weight(10f)
             ) {
 
@@ -57,10 +64,9 @@ private fun Greeting(name: String) {
             }
             OutlinedButton(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
                     .padding(16.dp),
-                onClick = { /*TODO*/ }) {
-                Text(text = "Show more")
+                onClick = { expanded.value = !expanded.value }) {
+                Text(text = if (expanded.value) "Show less" else "Show more")
             }
         }
     }
